@@ -1,30 +1,40 @@
-select movie_list.movie_id, movie_list.movie_title, movie_list.release_year,
-       rating_top100.movie_id, rating_top100.avg_rating, rating_top100.count, rating_top100.weight_average
-       from movie_list
-       join rating_top100
-       on movie_list.movie_id = rating_top100.movie_id;
+-- Join both tables
+select *
+  from movie_list as m
+  join rating_top100 as r
+    on m.movie_id= r.movie_id
 
--- 1. Calculate the average rating per movie based on the mubi_ratings_data.csv dataset.
+-- 1. The top 10 highest rated movies (on average):
 select m.movie_title, r.avg_rating
   from movie_list as m
   join rating_top100 as r
     on m.movie_id= r.movie_id
 	order by r.avg_rating desc
-	limit 5;
-
--- 2. Calculate the number of ratings received per movie (this gives an indication of how many times a movie is watched).
+	limit 10;
+	
+-- 2. Years with the most movies appeared in the top 100 listing. 
+select m.release_year, count(avg_rating)
+  from movie_list as m
+  join rating_top100 as r
+    on m.movie_id= r.movie_id
+	group by m.release_year
+	order by count desc
+	limit 1;
+	
+-- 3. The top 10 most rated movies (indication of most watched movies).
 select m.movie_title, r.count
   from movie_list as m
   join rating_top100 as r
     on m.movie_id= r.movie_id
 	order by r.count desc
-	limit 5;
+	limit 10;
 
--- 3. Years with the highest average rating for the release movie 
-select m.release_year,round (cast(avg(avg_rating) as numeric),2) as avg_rating
-  from movie_list as m
-  join rating_top100 as r
-    on m.movie_id= r.movie_id
-	group by m.release_year
-	order by avg_rating desc
-	limit 5;
+-- -- 3. Years with the highest average rating for the release movie 
+-- select m.release_year,round (cast(avg(avg_rating) as numeric),2) as avg_rating
+--   from movie_list as m
+--   join rating_top100 as r
+--     on m.movie_id= r.movie_id
+-- 	group by m.release_year
+-- 	order by avg_rating desc
+-- 	limit 10;
+	
