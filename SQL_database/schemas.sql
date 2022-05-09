@@ -1,4 +1,4 @@
-alter table rating_top100 drop constraint if exists rating_top100_movie_id_fkey;
+alter table if exists rating_top100 drop constraint if exists rating_top100_movie_id_fkey;
 
 drop table if exists movie_list;
 drop table if exists rating_top100;
